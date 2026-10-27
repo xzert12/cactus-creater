@@ -1,0 +1,97 @@
+plugins {
+    id 'fabric-loom' version '1.14-SNAPSHOT'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+processResources {
+    inputs.property "version", project.mod_version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.mod_version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+    it.options.encoding = 'UTF-8'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+// Wynikowy plik ma nazwę CactusTowerBuilder.jar (bez numeru wersji)
+tasks.named('jar') { archiveVersion = '' }
+tasks.named('remapJar') { archiveVersion = '' }
+
+org.gradle.jvmargs=-Xmx2G
+org.gradle.parallel=true
+
+minecraft_version=1.21.11
+loader_version=0.18.2
+fabric_version=0.139.4+1.21.11
+
+mod_version=1.0.0
+maven_group=pl.cactustower
+archives_base_name=CactusTowerBuilder
+
+# Cactus Tower Builder (Fabric 1.21.11, mod klienta)
+
+Mod klienta budujący piętrową farmę kaktusów w jednym chunku 16x16 (limit Y=250).
+Nie wymaga moda po stronie serwera - używa zwykłych interakcji gracza (useItemOn).
+
+## Wymagania
+- Minecraft Java 1.21.11, Fabric Loader >= 0.18.0, Fabric API 0.139.4+1.21.11 (lub nowszy dla 1.21.11)
+- Java 21
+
+## Instalacja
+Skopiuj `CactusTowerBuilder.jar` oraz Fabric API do `%APPDATA%\.minecraft\mods`.
+
+## Użycie
+1. Stań na PŁASKIM terenie w chunku, w którym chcesz budować. Wysokość, na której stoisz (Y stóp), to poziom warstwy piasku nr 0.
+2. Miej w ekwipunku: piasek, kaktusy, doniczki (mogą być w dowolnych slotach).
+3. Wyłącz w ustawieniach "Przełączaj skradanie" (tryb toggle) - mod symuluje przytrzymanie Shift.
+4. Naciśnij **X** -> **START**. GUI zamyka się samo (Shift działa tylko przy zamkniętym GUI).
+5. Mod NIE chodzi ani nie lata za Ciebie: stawia tylko w zasięgu 4,5 bloku. Gdy nic nie jest w zasięgu, GUI (X) pokaże współrzędne, do których masz podejść. Wyższe piętra wymagają latania (creative / elytra) lub stania na własnej konstrukcji.
+6. **STOP** natychmiast przerywa. **RESET chunka** zapomina wybrany chunk (następny START wybierze chunk, w którym stoisz). Zwykły START po STOP wznawia ten sam chunk.
+7. Gdy zabraknie materiału: status WAITING_FOR_BLOCKS + nazwa. Uzupełnij ekwipunek - mod wznowi sam.
+
+Statusy: STOPPED, BUILDING, WAITING_FOR_BLOCKS, FINISHED, ERROR.
+
+## Wzór (ZAŁOŻENIE - nie jest potwierdzoną kopią zdjęć)
+- Warstwa 0 i każda parzysta: pełny piasek 16x16.
+- Warstwa nieparzysta: kaktus na polach (x+z) parzystych, doniczka na nieparzystych.
+- Piasek na doniczce stawiany z Shift.
+Edycja: `Pattern.java`, metoda `expected()`.
+
+## Budowanie lokalnie
+`gradle build` (Gradle 9.2+, Java 21) -> `build/libs/CactusTowerBuilder.jar`.
+Gradle Wrapper nie jest dołączony (nie dało się go wygenerować offline) - workflow GitHub Actions używa zainstalowanego Gradle.
+
+## Status testów
+Kod NIE został skompilowany ani uruchomiony przez autora. Zweryfikowano jedynie składnię Javy.
+
+pluginManagement {
+    repositories {
+        maven { name = 'Fabric'; url = 'https://maven.fabricmc.net/' }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+rootProject.name = 'CactusTowerBuilder'
