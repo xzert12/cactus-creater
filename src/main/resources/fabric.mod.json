@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "cactustowerbuilder",
+  "version": "${version}",
+  "name": "Cactus Tower Builder",
+  "description": "Klientowy mod budujący wielopiętrową farmę kaktusów w jednym chunku (limit Y=250). GUI pod klawiszem X.",
+  "authors": ["Cactus Tower Builder"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["pl.cactustower.CactusTowerBuilderClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
