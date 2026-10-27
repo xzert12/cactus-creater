@@ -51,7 +51,7 @@ mod_version=1.0.0
 maven_group=pl.cactustower
 archives_base_name=CactusTowerBuilder
 
-# Cactus Tower Builder (Fabric 1.21.11, mod klienta)
+// Cactus Tower Builder (Fabric 1.21.11, mod klienta)
 
 Mod klienta budujący piętrową farmę kaktusów w jednym chunku 16x16 (limit Y=250).
 Nie wymaga moda po stronie serwera - używa zwykłych interakcji gracza (useItemOn).
